@@ -1,0 +1,31 @@
+CREATE TABLE users (
+ id VARCHAR(36) PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(254) NOT NULL UNIQUE,
+ password_hash VARCHAR(100) NOT NULL, role VARCHAR(10) NOT NULL, owner_slot INT UNIQUE,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT ck_single_owner CHECK ((role='ADMIN' AND owner_slot IS NOT NULL AND owner_slot=1) OR (role='CUSTOMER' AND owner_slot IS NULL))
+);
+CREATE TABLE categories (id VARCHAR(36) PRIMARY KEY, name VARCHAR(80) NOT NULL UNIQUE, image_url VARCHAR(500) NOT NULL, description VARCHAR(500) NOT NULL DEFAULT '');
+CREATE TABLE products (
+ id VARCHAR(36) PRIMARY KEY, category_id VARCHAR(36) NOT NULL, name VARCHAR(160) NOT NULL,
+ description TEXT NOT NULL, price_paise BIGINT NOT NULL, original_price_paise BIGINT NOT NULL,
+ stock INT NOT NULL, image_url VARCHAR(500) NOT NULL, images TEXT NOT NULL, badge VARCHAR(30) NOT NULL DEFAULT '',
+ featured BOOLEAN NOT NULL DEFAULT FALSE, deal BOOLEAN NOT NULL DEFAULT FALSE, active BOOLEAN NOT NULL DEFAULT TRUE,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (category_id) REFERENCES categories(id), CHECK(price_paise>0), CHECK(stock>=0)
+);
+CREATE TABLE orders (
+ id VARCHAR(36) PRIMARY KEY, user_id VARCHAR(36) NOT NULL, checkout_key VARCHAR(80) NOT NULL,
+ amount_paise BIGINT NOT NULL, currency VARCHAR(3) NOT NULL DEFAULT 'INR', status VARCHAR(30) NOT NULL,
+ razorpay_order_id VARCHAR(80) UNIQUE, payment_id VARCHAR(80) UNIQUE,
+ recipient VARCHAR(100) NOT NULL, phone VARCHAR(15) NOT NULL, address VARCHAR(500) NOT NULL, pincode VARCHAR(6) NOT NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE(user_id,checkout_key), FOREIGN KEY(user_id) REFERENCES users(id)
+);
+CREATE TABLE order_items (
+ id VARCHAR(36) PRIMARY KEY, order_id VARCHAR(36) NOT NULL, product_id VARCHAR(36) NOT NULL,
+ name VARCHAR(160) NOT NULL, image_url VARCHAR(500) NOT NULL, price_paise BIGINT NOT NULL, quantity INT NOT NULL,
+ FOREIGN KEY(order_id) REFERENCES orders(id), FOREIGN KEY(product_id) REFERENCES products(id)
+);
+CREATE TABLE subscribers (email VARCHAR(254) PRIMARY KEY, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX idx_products_category ON products(category_id);
+CREATE INDEX idx_orders_user ON orders(user_id);
