@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ElectroHub — React + Spring Boot + MySQL
 
 A working electronics store based on the supplied Circuit Spark Boutique frontend. The original dark background, cyan/purple palette, glass navigation, hero structure, category grid and product cards are retained in a compact React implementation. Category symbols have been replaced by bundled photographs.
@@ -269,3 +270,6 @@ only missing versioned migrations so the legacy database can start without rewri
 The public storefront uses an ElectroHub-branded marketplace layout focused only on electronics. The header includes search, login/account, notifications, customer care and cart. The electronics navigation and discovery areas link only to technology categories. The order-details screen uses a two-column marketplace layout with product summary, status timeline, delivery details, price breakdown, payment reference, customer-care link and a browser-print invoice action.
 
 Frontend runtime: Node.js 20.19+ (or Node.js 22.12+ recommended for the current Vite toolchain).
+=======
+# Electrohub
+>>>>>>> 949b370a8fe2dbc5121cac2994c2b523a0647b8e
