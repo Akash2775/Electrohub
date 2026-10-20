@@ -1,65 +1,75 @@
-# ElectroHub — Electronics E-Commerce Platform
+# ElectroHub — Full-Stack Electronics E-Commerce Platform
 
-ElectroHub is a full-stack electronics store built with **React, Spring Boot, and MySQL**. It includes a customer storefront, account and order flows, and a protected owner dashboard for managing products, categories, inventory, and orders.
+ElectroHub is a full-stack electronics e-commerce application built with **React, Spring Boot, and MySQL**. It provides a customer-facing storefront, product discovery, cart and checkout workflows, account management, order tracking, and a protected owner dashboard for managing products, categories, inventory, and orders.
 
-> **Development status:** This repository contains the application source and local setup scripts. Configure your own database and optional payment/email/SMS/storage credentials before using those integrations. Do not use demo data or test payment credentials for a live store.
+The project demonstrates full-stack application development, REST API integration, relational database management, authentication, and e-commerce workflows.
+
+> **Development status:** This repository includes application source code and local setup scripts. Database access and optional third-party integrations require your own configuration and credentials. The project is intended for development and demonstration until production requirements are completed.
 
 ## Features
 
-### Customer storefront
-- Browse the home page, shop, categories, deals, product details, and image galleries.
-- Search products, manage a cart, save products, and maintain account/profile information.
-- Sign up and sign in, add a shipping address at checkout, and view order status.
-- Razorpay checkout integration (requires your own test/live credentials).
+### Customer Storefront
+- Browse electronics, categories, featured products, deals, and product details.
+- Search for products and explore product image galleries.
+- Add products to the cart and save products for later.
+- Register, sign in, and manage account and profile information.
+- Add a shipping address during checkout and view order status.
+- Integrate Razorpay checkout when payment credentials are configured.
 
-### Owner dashboard
-- Manage products, prices, stock, featured/deal flags, and product images.
-- Create, edit, and delete categories.
-- View order information and update fulfilment status.
-- Use a single configured owner account; public registration creates customer accounts only.
+### Owner Dashboard
+- Create, update, and manage products and prices.
+- Manage inventory, featured products, deals, and product images.
+- Create, edit, and delete product categories.
+- View customer orders and update fulfilment status.
+- Access protected owner functionality through a configured owner account.
 
-### Additional capabilities
-- Responsive dark storefront UI with bundled category photographs.
-- MySQL schema versioning with Flyway.
+### Additional Capabilities
+- Responsive dark-themed storefront.
+- MySQL database with Flyway schema migrations.
 - Local image uploads during development.
-- Optional integrations for Razorpay, Amazon SES SMTP, MSG91 OTP, and Cloudflare R2. These require configuration and are not enabled by default.
+- Optional integrations for Razorpay payments, Amazon SES SMTP, MSG91 OTP, and Cloudflare R2 storage.
+- Frontend and backend validation commands.
 
-## Tech stack
+## Technology Stack
 
-| Layer | Technology |
-| --- | --- |
+| Layer | Technologies |
+|---|---|
 | Frontend | React, Vite, React Router |
 | Backend | Java 17+, Spring Boot 3 |
 | Database | MySQL 8.0.16+ |
 | Database migrations | Flyway |
-| Build tools | npm, Maven |
-| Payments | Razorpay (optional; configure your own credentials) |
+| API | REST API |
+| Frontend tooling | Node.js, npm |
+| Backend build | Maven |
+| Payment integration | Razorpay (optional) |
 
-## Project structure
+## Project Structure
 
 ```text
 Electrohub/
 ├── frontend/       # React + Vite application
 ├── backend/        # Spring Boot REST API
-├── database/       # MySQL database/user setup script
-└── docs/           # Architecture, validation, and integration notes
+├── database/       # MySQL database and user setup
+└── docs/           # Architecture and setup documentation
 ```
 
-Backend source is organised by responsibility: controllers, DTOs, services, repositories, and JDBC repository implementations. Flyway migrations are stored under `backend/src/main/resources/db/migration`.
+The backend separates application responsibilities into controllers, DTOs, services, repositories, and JDBC repository implementations. Database migrations are maintained in `backend/src/main/resources/db/migration`.
 
-## Getting started
+## Getting Started
 
-### 1. Prerequisites
+Follow these instructions to run ElectroHub locally.
 
-Install the following tools:
+### Prerequisites
 
-- **Git**
-- **Java 17 or newer**
-- **Maven**
-- **Node.js 20.19 or newer** (Node 22.12+ recommended) and npm
-- **MySQL 8.0.16 or newer**
+Install the following software:
 
-Check your installations:
+- Git
+- Java 17 or newer
+- Maven
+- Node.js 20.19 or newer (Node.js 22.12+ recommended) and npm
+- MySQL 8.0.16 or newer
+
+Verify your installations:
 
 ```bash
 git --version
@@ -70,63 +80,69 @@ npm -v
 mysql --version
 ```
 
-### 2. Clone the repository
+### 1. Clone the Repository
 
-Open a terminal in the directory where you keep your projects:
+Open a terminal in your preferred projects directory:
 
 ```bash
 git clone https://github.com/Akash2775/Electrohub.git
 cd Electrohub
 ```
 
-If you already cloned the repository, update your local copy instead:
+If you have already cloned the repository, navigate to your local repository and pull the latest changes:
 
 ```bash
 git pull origin main
 ```
 
-### 3. Create the MySQL database and user
+### 2. Configure MySQL
 
 1. Open `database/setup.sql`.
-2. Replace `CHANGE_THIS_DATABASE_PASSWORD` with a strong password of your choice and save the file.
-3. Run the script as a MySQL administrator. On Windows, you can open the file in **MySQL Workbench**, connect as an administrator, and execute it. Alternatively, run the following from **Command Prompt** (not PowerShell) in the repository root:
+2. Replace `CHANGE_THIS_DATABASE_PASSWORD` with a strong password and save the file.
+3. Run the setup script as a MySQL administrator.
+
+**Windows:** You can execute the script through MySQL Workbench. Alternatively, run the following command from **Command Prompt**, in the repository root:
 
 ```bat
-mysql -u root -p < database\setup.sql
+mysql -u root -p < database\\setup.sql
 ```
 
-On Ubuntu/Linux:
+**Ubuntu/Linux:**
 
 ```bash
 sudo mysql < database/setup.sql
 ```
 
-The script creates the `electrohub` database and its local database user. Flyway creates and versions the application tables when the backend starts; you do not need to import a separate database dump.
+The script creates the `electrohub` database and its local database user. Flyway creates and manages the application tables when the backend starts, so you do not need to import a separate database dump.
 
-**Important:** If the MySQL user already exists, `CREATE USER IF NOT EXISTS` does not change its password. Make sure the password you enter in the backend configuration matches the existing MySQL user's password.
+**Important:** If the MySQL user already exists, `CREATE USER IF NOT EXISTS` will not update its password. Ensure that the password configured for the backend matches the existing MySQL user's password.
 
-### 4. Configure and start the backend
+### 3. Configure and Run the Backend
 
-In a terminal, from the repository root:
+From the repository root, run:
 
 ```bash
 cd backend
 python setup_local.py
 ```
 
-On Linux/macOS, use `python3 setup_local.py` if `python` points to a different version.
+On Linux/macOS, use `python3 setup_local.py` if necessary.
 
-Enter your owner email, owner password, and MySQL user's password when prompted. The script creates `backend/.env` and preserves it if it already exists. The generated file is ignored by Git and must **never** be committed or shared.
+Follow the prompts to configure your owner email, owner password, and MySQL user password. The setup script creates `backend/.env` and preserves the file if it already exists.
 
-Then start the backend from the same `backend` directory:
+The generated `.env` file is ignored by Git. **Never commit or share this file or its secrets.**
+
+Start the backend from the same `backend` directory:
 
 ```bash
 python run_local.py
 ```
 
-On Linux/macOS, use `python3 run_local.py` if needed.
+On Linux/macOS, use `python3 run_local.py` if necessary.
 
-The API runs at **http://localhost:8080**. Keep this terminal open while using the frontend. If you prefer manual configuration, copy `backend/.env.example` to `backend/.env` and fill in the values. At minimum, configure:
+The backend API runs at **http://localhost:8080**.
+
+Alternatively, copy `backend/.env.example` to `backend/.env` and configure the required variables manually:
 
 ```dotenv
 DB_URL=jdbc:mysql://localhost:3306/electrohub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -136,11 +152,11 @@ ADMIN_EMAIL=you@example.com
 ADMIN_PASSWORD=your_unique_password_at_least_12_characters
 ```
 
-The owner account is created on the first startup. Changing `ADMIN_PASSWORD` later is **not** a password-reset operation. Keep your owner credentials safe.
+The owner account is created during the first startup. Changing `ADMIN_PASSWORD` afterward does not reset an existing owner's password.
 
-### 5. Install and start the frontend
+### 4. Configure and Run the Frontend
 
-Open a **second terminal** at the repository root:
+Open a **second terminal** in the repository root:
 
 ```bash
 cd frontend
@@ -148,19 +164,28 @@ npm ci
 npm run dev
 ```
 
-Open **http://localhost:5173** in your browser. The Vite development proxy forwards `/api` and `/uploads` requests to the backend on port 8080. Keep using `localhost` consistently during a session rather than switching between `localhost` and `127.0.0.1`.
+Open the application in your browser:
 
-## Local login and demo data
+**http://localhost:5173**
 
-- Sign in with the owner email and password configured in `backend/.env` to access the owner dashboard.
-- Use the sign-up flow to create a customer account.
-- The application seeds eight demo products by default for local testing. Set `SEED_CATALOG=false` in `backend/.env` before the first startup if you want to skip the initial demo catalogue.
-- Replace demo product descriptions, prices, and photos with accurate information before any real sales.
+The Vite development proxy forwards `/api` and `/uploads` requests to the backend on port 8080. Keep both frontend and backend terminals running while testing the application.
 
-## Optional integrations
+For consistent local sessions, use `localhost` rather than switching between `localhost` and `127.0.0.1`.
 
-### Razorpay payments
-Add your own Razorpay **test-mode** credentials to `backend/.env`:
+## Local Accounts and Demo Data
+
+- Sign in using the owner credentials configured in `backend/.env` to access the owner dashboard.
+- Use the registration flow to create a customer account.
+- The application seeds eight demo products by default for local testing.
+- To skip the initial demo catalogue, set `SEED_CATALOG=false` in `backend/.env` before the first startup.
+
+Replace demo product descriptions, prices, and images with accurate information before using the application for real sales.
+
+## Optional Integrations
+
+### Razorpay Payments
+
+To test payment functionality, configure your own Razorpay **test-mode** credentials in `backend/.env`:
 
 ```dotenv
 RAZORPAY_KEY_ID=your_test_key_id
@@ -168,16 +193,27 @@ RAZORPAY_KEY_SECRET=your_test_key_secret
 RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 ```
 
-Restart the backend after changing environment variables. For local webhook testing, you will need a public HTTPS tunnel and a webhook configured in the Razorpay dashboard. Follow the official [Razorpay Standard Checkout documentation](https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/integration-steps/) and [webhook validation guide](https://razorpay.com/docs/webhooks/validate-test/). Keep secret keys on the backend only. Use test mode until your integration has been verified.
+Restart the backend after changing environment variables. Local webhook testing requires a public HTTPS tunnel and an appropriately configured webhook in your Razorpay dashboard.
 
-### Email, OTP, and remote image storage
-Amazon SES SMTP, MSG91, and Cloudflare R2 settings are available in `backend/.env.example`. They are optional and require your own provider accounts and credentials. Read `docs/PRODUCTION-INTEGRATIONS.md` before enabling them.
+Official resources:
+- [Razorpay Standard Checkout documentation](https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/integration-steps/)
+- [Razorpay webhook validation guide](https://razorpay.com/docs/webhooks/validate-test/)
 
-## Validation commands
+Keep payment secrets on the backend only. Use test mode until the integration has been verified.
 
-Run these commands from the indicated directories:
+### Email, OTP, and Remote Image Storage
 
-**Frontend** (`frontend/`):
+Optional configuration for Amazon SES SMTP, MSG91 OTP, and Cloudflare R2 is available in `backend/.env.example`.
+
+These integrations require your own provider accounts and credentials. Refer to `docs/PRODUCTION-INTEGRATIONS.md` before enabling them.
+
+## Validation and Testing
+
+Run the commands from the appropriate directories.
+
+### Frontend
+
+From `frontend/`:
 
 ```bash
 npm run build
@@ -185,38 +221,47 @@ npm run lint
 npm test
 ```
 
-**Backend** (`backend/`):
+### Backend
+
+From `backend/`:
 
 ```bash
 mvn test
 mvn package
 ```
 
-These are the project's available validation commands; results may depend on your local tool versions and configuration. See `docs/VALIDATION.md` for project-specific validation notes.
+These commands are provided for local validation. Actual results depend on your installed tools, configuration, and test environment.
+
+For additional details, see `docs/VALIDATION.md`.
 
 ## Troubleshooting
 
-- **MySQL access denied:** Confirm that `DB_PASSWORD` matches the password for the `electrohub` MySQL user.
-- **Backend cannot connect to MySQL:** Check that the MySQL service is running and listening on port 3306.
-- **Java/Maven version error:** Run `mvn -version` and verify Maven is using Java 17 or newer.
-- **Port already in use:** Stop the other process using port 8080 or 5173 before starting ElectroHub.
-- **Payment setup is incomplete:** Add valid Razorpay test credentials to `backend/.env` and restart the backend. Never publish your secret key.
-- **Image upload fails:** Sign in as the owner and upload a supported JPG or PNG image within the configured size limit.
-- **Frontend changes are not visible:** Ensure commands are running from this repository's `frontend` directory, then refresh the browser.
+| Problem | Suggested solution |
+|---|---|
+| MySQL access denied | Verify that `DB_PASSWORD` matches the password for the `electrohub` database user. |
+| Backend cannot connect to MySQL | Confirm that MySQL is running and listening on port 3306. |
+| Java or Maven version error | Run `mvn -version` and verify that Maven uses Java 17 or newer. |
+| Port already in use | Stop the conflicting process using port 8080 or 5173. |
+| Payment setup is incomplete | Configure valid Razorpay test credentials and restart the backend. |
+| Image upload fails | Sign in as the owner and verify that the image format and size meet the configured limits. |
+| Frontend changes are not visible | Run the frontend commands from `frontend/` and refresh the browser. |
 
-## Security notes
+## Security and Production Considerations
 
 - Never commit `backend/.env`, passwords, API secrets, or live payment credentials.
-- Keep `COOKIE_SECURE=false` for local HTTP development only. Configure HTTPS and `COOKIE_SECURE=true` in production.
-- Production use also requires secure hosting, persistent storage for uploads, database backups, and accurate store policies/contact details.
+- Keep `COOKIE_SECURE=false` only for local HTTP development. Configure HTTPS and `COOKIE_SECURE=true` in production.
+- Production deployment requires secure hosting, persistent image storage, database backups, and accurate store policies and contact details.
+- Configure and verify third-party integrations before enabling them in production.
 - This project does not migrate users, products, or orders from a previous MongoDB or Supabase database.
 
 ## Documentation
 
-- `docs/ARCHITECTURE.md` — application architecture and dependency flow.
-- `docs/VALIDATION.md` — validation notes and remaining manual checks.
-- `docs/PRODUCTION-INTEGRATIONS.md` — optional integrations and production configuration.
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — application architecture and dependency flow.
+- [`docs/VALIDATION.md`](docs/VALIDATION.md) — validation instructions and manual checks.
+- [`docs/PRODUCTION-INTEGRATIONS.md`](docs/PRODUCTION-INTEGRATIONS.md) — optional integrations and production configuration.
 
----
+## Project
 
-Built as a full-stack project for learning and demonstrating frontend, backend, database, and e-commerce integration skills.
+**ElectroHub** is a full-stack project demonstrating frontend development, backend engineering, database integration, and e-commerce application workflows.
+
+Repository: [github.com/Akash2775/Electrohub](https://github.com/Akash2775/Electrohub)
